@@ -174,34 +174,57 @@ namespace UpdateSiteMoveStatus
 
                     Console.WriteLine($"Files have been added!");
 
-                    //if (jsFile.CheckOutType != CheckOutType.None)
-                    //{
-                    //    jsFile2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
-                    //    Console.WriteLine($"{FileShortName} has been checked in!");
-                    //}
-
-                    //if (srcMap.CheckOutType != CheckOutType.None)
-                    //{
-                    //    srcMap2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
-                    //    Console.WriteLine($"{FileShortName}.map has been checked in!");
-                    //}
-
-                    //if (src.CheckOutType != CheckOutType.None)
-                    //{
-                    //    src2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
-                    //    Console.WriteLine($"{srcShortName} has been checked in!");
-                    //}
-
-                    try
+                    if (jsFile.CheckOutType != CheckOutType.None)
                     {
-                        ctx.ExecuteQuery();
+                        jsFile2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
+                        try
+                        {
+                            ctx.ExecuteQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}", ConsoleColor.DarkRed);
+                            Console.ReadKey();
+                            Environment.Exit(1);
+                        }
+                        Console.WriteLine($"{FileShortName} has been checked in!");
                     }
-                    catch (Exception ex)
+
+                    if (srcMap.CheckOutType != CheckOutType.None)
                     {
-                        Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}", ConsoleColor.DarkRed);
-                        Console.ReadKey();
-                        Environment.Exit(1);
+                        srcMap2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
+                        try
+                        {
+                            ctx.ExecuteQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}", ConsoleColor.DarkRed);
+                            Console.ReadKey();
+                            Environment.Exit(1);
+                        }
+                        Console.WriteLine($"{FileShortName}.map has been checked in!");
+
                     }
+
+                    if (src.CheckOutType != CheckOutType.None)
+                    {
+                        src2.CheckIn(String.Empty, CheckinType.MajorCheckIn);
+                        
+                        try
+                        {
+                            ctx.ExecuteQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}", ConsoleColor.DarkRed);
+                            Console.ReadKey();
+                            Environment.Exit(1);
+                        }
+                        Console.WriteLine($"{srcShortName} has been checked in!");
+                    }
+
+                    
                     Console.WriteLine($"Server synced!");
 
 
