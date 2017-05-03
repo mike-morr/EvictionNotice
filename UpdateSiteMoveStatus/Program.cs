@@ -50,7 +50,7 @@ namespace UpdateSiteMoveStatus
 
         private static void Startup()
         {
-            using (var ctx = GetCtx())
+            using (var ctx = Context)
             {
                 Site site = ctx.Site;
 
@@ -229,14 +229,24 @@ namespace UpdateSiteMoveStatus
             }
 
         }
+        private static ClientContext _context;
 
-        private static ClientContext GetCtx()
+        public static ClientContext Context
         {
-            var ctx = new ClientContext(SiteUrl)
-            {
-                Credentials = CredentialCache.DefaultNetworkCredentials
-            };
-            return ctx;
+            get {
+                if (_context != null)
+                {
+                    return _context;
+                }
+                else
+                {
+                    var ctx = new ClientContext(SiteUrl)
+                    {
+                        Credentials = CredentialCache.DefaultNetworkCredentials
+                    };
+                    return _context = ctx;
+                }
+            }
         }
     }
 }
