@@ -29,7 +29,7 @@ function getRedirectFromSharePoint() {
 			url: `http://lab.yosp.io/sites/dev/_api/web/lists/getbytitle('SiteMoves')/items?$filter=OldUrl eq '${encodeURIComponent(window.location.href)}'`,
 			error: (r) => processFailure(r),
 			success: (r) => {
-				processResponse(r.d.results)
+				processResponse(r.d.results, false)
 			}
 		}
 		// Actually calls the server, the next line of code to run will
@@ -55,14 +55,14 @@ function processFailure(response) {
 function processResponse(response, error: boolean) {
 	header.innerHTML = "Eviction Notice!";
 	
-	if (error) {
+	if (error || !response || !response.NewUrl) {
 		// Handle URL not found
 		defaultUrl = defaultUrl + window.location.pathname.split("/").join(" ").trim()
 		h2.innerHTML = `The previous tenant did not leave a forwarding address!  Let's see if we can find it by using search at ${defaultUrl}`
 		h3.innerHTML = `You will be redirected in ${countDown}`
 	} else {
 		// Handle URL was found
-		newUrl = response[0].NewUrl
+		newUrl = response.NewUrl
 		h2.innerHTML = `This previous tenant left a forwarding address!  This site has been permanently moved to ${newUrl}`
 		h3.innerHTML = `You will be redirected in ${countDown}`
 	}

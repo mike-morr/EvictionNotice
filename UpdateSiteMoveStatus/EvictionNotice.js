@@ -24,7 +24,7 @@ function getRedirectFromSharePoint() {
             url: "http://lab.yosp.io/sites/dev/_api/web/lists/getbytitle('SiteMoves')/items?$filter=OldUrl eq '" + encodeURIComponent(window.location.href) + "'",
             error: function (r) { return processFailure(r); },
             success: function (r) {
-                processResponse(r.d.results);
+                processResponse(r.d.results, false);
             }
         };
         // Actually calls the server, the next line of code to run will
@@ -40,11 +40,11 @@ function processFailure(response) {
     var code = response.status;
     var message = response.statusText;
     console.log("Error in http request:\r\nError Code: " + code + "\r\nError Message: " + message);
-    processResponse(response);
+    processResponse(response, true);
 }
-function processResponse(response) {
+function processResponse(response, error) {
     header.innerHTML = "Eviction Notice!";
-    if (response && response.length === 0) {
+    if (error || !response || !response.NewUrl) {
         // Handle URL not found
         defaultUrl = defaultUrl + window.location.pathname.split("/").join(" ").trim();
         h2.innerHTML = "The previous tenant did not leave a forwarding address!  Let's see if we can find it by using search at " + defaultUrl;
@@ -52,7 +52,7 @@ function processResponse(response) {
     }
     else {
         // Handle URL was found
-        newUrl = response[0].NewUrl;
+        newUrl = response.NewUrl;
         h2.innerHTML = "This previous tenant left a forwarding address!  This site has been permanently moved to " + newUrl;
         h3.innerHTML = "You will be redirected in " + countDown;
     }
