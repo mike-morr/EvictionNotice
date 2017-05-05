@@ -174,9 +174,17 @@ namespace UpdateSiteMoveStatus
                 }
                 else
                 {
-                    var ctx = new ClientContext(SiteUrl)
+                    var creds = CredentialCache.DefaultNetworkCredentials;
+                    var user = Environment.GetEnvironmentVariable("EvictionNoticeUser", EnvironmentVariableTarget.User);
+                    if (user != null)
                     {
-                        Credentials = CredentialCache.DefaultNetworkCredentials
+                        var pass = Environment.GetEnvironmentVariable("EvictionNoticePassword", EnvironmentVariableTarget.User);
+                        creds = new NetworkCredential(user, pass);
+                    }
+
+                    var ctx = new ClientContext(SiteUrl)
+                    { 
+                        Credentials = creds
                     };
                     return _context = ctx;
                 }
