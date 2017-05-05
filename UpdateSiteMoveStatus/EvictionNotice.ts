@@ -27,7 +27,7 @@ function getRedirectFromSharePoint() {
 			headers: { "Accept": "application/json;odata=verbose" },
 			method: "GET",
 			url: `http://lab.yosp.io/sites/dev/_api/web/lists/getbytitle('SiteMoves')/items?$filter=OldUrl eq '${encodeURIComponent(window.location.href)}'`,
-			error: processFailure,
+			error: (r) => processFailure(r),
 			success: (r) => {
 				processResponse(r.d.results)
 			}
