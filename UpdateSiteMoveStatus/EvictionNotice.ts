@@ -49,18 +49,17 @@ function processFailure(response) {
 	let code = response.status
 	let message = response.statusText
 	console.log(`Error in http request:\r\nError Code: ${code}\r\nError Message: ${message}`);
-	processResponse(response)
+	processResponse(response, true)
 }
 
-function processResponse(response?) {
+function processResponse(response, error: boolean) {
 	header.innerHTML = "Eviction Notice!";
 	
-	if (response && response.length === 0) {
+	if (error) {
 		// Handle URL not found
 		defaultUrl = defaultUrl + window.location.pathname.split("/").join(" ").trim()
 		h2.innerHTML = `The previous tenant did not leave a forwarding address!  Let's see if we can find it by using search at ${defaultUrl}`
 		h3.innerHTML = `You will be redirected in ${countDown}`
-
 	} else {
 		// Handle URL was found
 		newUrl = response[0].NewUrl
